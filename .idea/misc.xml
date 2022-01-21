@@ -32,6 +32,8 @@
         <entry key="..\:/project/MiniChat/app/src/main/res/layout/item_container_sent_message.xml" value="0.1" />
         <entry key="..\:/project/MiniChat/app/src/main/res/layout/item_friend.xml" value="0.19021739130434784" />
         <entry key="..\:/project/MiniChat/app/src/main/res/layout/item_user.xml" value="0.18" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/activity_chat.xml" value="0.1" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/item_container_received_message.xml" value="0.1" />
       </map>
     </option>
   </component>

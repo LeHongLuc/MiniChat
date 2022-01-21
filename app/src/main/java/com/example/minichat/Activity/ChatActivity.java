@@ -245,39 +245,7 @@ public class ChatActivity extends BaseActivity {
                     }
                 }
         );
-//        received_mess=findViewById(R.id.item_received_mess);
-//        received_map=findViewById(R.id.item_received_map);
-//        send_map=findViewById(R.id.item_sent_map);
-//        send_mess=findViewById(R.id.item_sent_mess);
-//
-//        received_mess.setOnClickListener(v -> {
-//            View view1 = getCurrentFocus();
-//            if (view1 != null) {
-//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
-//            }
-//        });
-//        received_map.setOnClickListener(v -> {
-//            View view1 = getCurrentFocus();
-//            if (view1 != null) {
-//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
-//            }
-//        });
-//        send_map.setOnClickListener(v -> {
-//            View view1 = getCurrentFocus();
-//            if (view1 != null) {
-//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
-//            }
-//        });
-//        send_mess.setOnClickListener(v -> {
-//            View view1 = getCurrentFocus();
-//            if (view1 != null) {
-//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
-//            }
-//        });
+
     }
 
     private String getRealDateTime(Date date) {

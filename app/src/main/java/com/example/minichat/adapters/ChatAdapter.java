@@ -2,7 +2,9 @@ package com.example.minichat.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +21,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final List<ChatMessage> chatMessageList;
     private String receivedProfileImage;
     private final String senderId;
-private Context mContext;
+    private Context mContext;
     public static final int VIEW_TYPE_SENT = 1;
     public static final int VIEW_TYPE_RECEIVED = 2;
 
@@ -84,6 +86,16 @@ private Context mContext;
         void setData(ChatMessage chatMessage) {
             binding.tvMessage.setText(chatMessage.message);
             binding.tvDateTime.setText(chatMessage.dateTime);
+            binding.itemSentMess.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.getFocusable();
+                    if (v != null) {
+                        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    }
+                }
+            });
         }
     }
 
@@ -100,7 +112,16 @@ private Context mContext;
             binding.tvMessage.setText(chatMessage.message);
             binding.tvDateTime.setText(chatMessage.dateTime);
             Glide.with(mContext).load(receivedProfileImage).into(binding.imgAvt);
-
+            binding.itemReceivedMess.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.getFocusable();
+                    if (v != null) {
+                        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    }
+                }
+            });
 
         }
     }

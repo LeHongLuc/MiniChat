@@ -12,4 +12,6 @@
     <color name="bg_icon">#20FFFFFF</color>
     <color name="bg_mess_me">#FFFFFF</color>
     <color name="bg_mess_you">#FFF070</color>
+    <color name="red">#FF0000</color>
+    <color name="text_link">#228000</color>
 </resources>

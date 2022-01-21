@@ -32,8 +32,19 @@
         <entry key="..\:/project/MiniChat/app/src/main/res/layout/item_container_sent_message.xml" value="0.1" />
         <entry key="..\:/project/MiniChat/app/src/main/res/layout/item_friend.xml" value="0.19021739130434784" />
         <entry key="..\:/project/MiniChat/app/src/main/res/layout/item_user.xml" value="0.18" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable-v24/ic_close.xml" value="0.21614583333333334" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/bg_chat_input.xml" value="0.21614583333333334" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/bg_content_bottom.xml" value="0.21614583333333334" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/bg_sent_message.xml" value="0.21614583333333334" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/bg_waning.xml" value="0.21614583333333334" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/bg_warning.xml" value="0.21614583333333334" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/ic_fail_connected.xml" value="0.21614583333333334" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/activity_chat.xml" value="0.1" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/activity_splash.xml" value="0.1213768115942029" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/dialog_connection_warning.xml" value="0.16" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/item_container_received_message.xml" value="0.1" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/layout_chat_head.xml" value="0.1" />
       </map>
     </option>
   </component>

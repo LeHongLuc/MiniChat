@@ -1,10 +1,15 @@
 package com.example.minichat.Activity;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -15,6 +20,7 @@ import com.example.minichat.adapters.ChatAdapter;
 import com.example.minichat.databinding.ActivityChatBinding;
 import com.example.minichat.models.ChatMessage;
 import com.example.minichat.models.User;
+import com.example.minichat.utilities.ChatHeadService;
 import com.example.minichat.utilities.Constants;
 import com.example.minichat.utilities.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -67,7 +73,11 @@ public class ChatActivity extends BaseActivity {
         loadReceivedMessage();
         init();
         listenMessage();
+
+
+
     }
+
 
     private void init() {
         preferenceManager = new PreferenceManager(getApplicationContext());
@@ -76,6 +86,7 @@ public class ChatActivity extends BaseActivity {
         binding.rcvChat.setAdapter(chatAdapter);
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
+
 
     private void sendMessage() {
         HashMap<String, Object> message = new HashMap<>();
@@ -163,7 +174,6 @@ public class ChatActivity extends BaseActivity {
                     if (er != null) {
                         return;
                     }
-
                     if (value != null) {
                         if (value.getLong(Constants.KEY_AVAILABILITY) != null) {
                             int availability = Objects.requireNonNull(value.getLong(Constants.KEY_AVAILABILITY)).intValue();

@@ -3,8 +3,12 @@
     package="com.example.minichat">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION"/>
 
     <application
         android:allowBackup="true"
@@ -14,14 +18,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MiniChat">
         <activity
+            android:name=".Activity.SplashActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".Activity.ChangePasswordActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Activity.ChatActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Activity.UserActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Activity.SignUpActivity"
             android:exported="true"
@@ -30,11 +43,7 @@
             android:name=".Activity.SignInActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Activity.MainActivity"
@@ -47,6 +56,20 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service
+            android:name=".utilities.ChatHeadService"
+            android:enabled="true"
+            android:exported="false"/>
+        <receiver
+            android:name=".utilities.Broadcast"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

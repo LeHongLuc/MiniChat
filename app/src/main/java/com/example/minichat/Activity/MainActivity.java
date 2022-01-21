@@ -1,23 +1,32 @@
 package com.example.minichat.Activity;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.view.ViewCompat;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.minichat.R;
 import com.example.minichat.UserListener;
 import com.example.minichat.adapters.RecentConversionAdapter;
 import com.example.minichat.databinding.ActivityMainBinding;
 import com.example.minichat.models.ChatMessage;
 import com.example.minichat.models.User;
+import com.example.minichat.utilities.ChatHeadService;
 import com.example.minichat.utilities.Constants;
 import com.example.minichat.utilities.PreferenceManager;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -41,7 +50,10 @@ public class MainActivity extends BaseActivity implements UserListener {
     List<ChatMessage> chatMessageList;
     RecentConversionAdapter recentConversionAdapter;
     FirebaseFirestore firebaseFirestore;
+    AlertDialog alertDialog;
 
+    private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2084;
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +61,33 @@ public class MainActivity extends BaseActivity implements UserListener {
         setContentView(binding.getRoot());
         Fresco.initialize(getApplicationContext());
 
+        //kiểm tra kết nối mạng
+        if (checkConnect() == false) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Lỗi mạng..!!!");
+            builder.setIcon(R.drawable.ic_fail_connected);
+            builder.setMessage("Kiểm tra lại đường truyền");
+            builder.setCancelable(false);
+            builder.setPositiveButton("OUT", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+
+            builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+
+                }
+            });
+            alertDialog = builder.create();
+            alertDialog.show();
+        } else {
+
+        }
 
         preferenceManager = new PreferenceManager(getApplicationContext());
         chatMessageList = new ArrayList<>();
@@ -60,11 +99,59 @@ public class MainActivity extends BaseActivity implements UserListener {
         getToken();
         setListeners();
         listenerConversation();
-
-
-
+        if (!Settings.canDrawOverlays(this)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, CODE_DRAW_OVER_OTHER_APP_PERMISSION);
+        } else {
+            initializeView();
+        }
+    }
+    private void initializeView() {
+        binding.tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startService(new Intent(MainActivity.this, ChatHeadService.class));
+                finish();
+            }
+        });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CODE_DRAW_OVER_OTHER_APP_PERMISSION) {
+
+            //Check if the permission is granted or not.
+            // Settings activity never returns proper value so instead check with following method
+            if (Settings.canDrawOverlays(this)) {
+                initializeView();
+            } else { //Permission is not available
+                Toast.makeText(this,
+                        "Draw over other app permission not available. Closing the application",
+                        Toast.LENGTH_SHORT).show();
+
+                finish();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+
+
+
+    //kiểm tra kết nối mạng
+    private boolean checkConnect() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        } else
+            return false;
+    }
+
+    // lắng nghe sự kiện onclick
     private void setListeners() {
         binding.imgSignout.setOnClickListener(v -> signOut());
         binding.fab.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UserActivity.class)));
@@ -78,16 +165,14 @@ public class MainActivity extends BaseActivity implements UserListener {
         });
     }
 
+    // load ảnh và tên của user mới đăng nhập
     private void loadDetails() {
-
         binding.tvName.setText(preferenceManager.getString(Constants.KEY_NAME));
-
         Glide.with(this).load(preferenceManager.getString(Constants.KEY_IMAGE)).into(binding.imgAvt);
     }
 
-    private void showToast(String toast) {
-        Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
-    }
+
+
 
     private void listenerConversation() {
         firebaseFirestore.collection(Constants.KEY_COLLECTION_CONVERSIONS)
@@ -160,7 +245,8 @@ public class MainActivity extends BaseActivity implements UserListener {
 
     private void signOut() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setMessage("Do you want to sign out??");
+        builder.setTitle("ĐĂNG XUẤT");
+        builder.setMessage("Bạn có chắc muốn đăng xuất??");
 
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
@@ -179,7 +265,7 @@ public class MainActivity extends BaseActivity implements UserListener {
                             startActivity(new Intent(getApplicationContext(), SignInActivity.class));
                             finish();
                         })
-                        .addOnFailureListener(e -> showToast("Unable to sign out!"));
+                        .addOnFailureListener(e -> showToast("Không thể đăng xuất!"));
 
             }
         });
@@ -196,11 +282,15 @@ public class MainActivity extends BaseActivity implements UserListener {
     }
 
 
-
+// sự kiện bấm vào từng item chat
     @Override
     public void onUserClick(User user) {
         Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
         intent.putExtra(Constants.KEY_USER, user);
         startActivity(intent);
+    }
+
+    private void showToast(String toast) {
+        Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
     }
 }

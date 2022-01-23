@@ -41,8 +41,7 @@ public class SignInActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(getApplicationContext());
 
         if (preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)) {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            finish();
+            signIn();
         }
 
         //kiểm tra mạng
@@ -60,11 +59,9 @@ public class SignInActivity extends AppCompatActivity {
                             });
 
             builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-
                                 }
                             });
             alertDialog = builder.create();
@@ -184,10 +181,10 @@ public class SignInActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() > 0) {
                         DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                        preferenceManager.clear();
                         preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
                         preferenceManager.putString(Constants.KEY_USER_ID, documentSnapshot.getId());
-                        preferenceManager.putString(Constants.KEY_NAME, documentSnapshot.getString(Constants.KEY_NAME));
-                        preferenceManager.putString(Constants.KEY_IMAGE, documentSnapshot.getString(Constants.KEY_IMAGE));
+                        preferenceManager.putString(Constants.KEY_EMAIL, documentSnapshot.getString(Constants.KEY_EMAIL));
 
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

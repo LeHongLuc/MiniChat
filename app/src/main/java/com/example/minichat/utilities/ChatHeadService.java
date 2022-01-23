@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.example.minichat.Activity.ChatActivity;
+import com.example.minichat.Activity.MainActivity;
 import com.example.minichat.R;
 
 public class ChatHeadService extends Service {
@@ -90,7 +91,7 @@ public class ChatHeadService extends Service {
                         //to identify if the user clicked the view or not.
                         if (lastAction == MotionEvent.ACTION_DOWN) {
                             //Open the chat conversation click.
-                            Intent intent = new Intent(ChatHeadService.this, ChatActivity.class);
+                            Intent intent = new Intent(ChatHeadService.this, MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
 

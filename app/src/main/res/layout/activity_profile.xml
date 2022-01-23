@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity.ProfileActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgBack"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:padding="@dimen/_6sdp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_corner_radius="@dimen/_8sdp"
+            app:tint="@color/white" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imgAvt"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_80sdp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:background="@drawable/bg_icon"
+            android:scaleType="centerCrop"
+            android:transitionName="imgAvt_changepass"
+            app:riv_corner_radius="@dimen/_8sdp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:background="@drawable/bg_sent_message"
+        android:orientation="horizontal"
+        android:padding="@dimen/_10sdp"
+        android:visibility="invisible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email: "
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/_15sdp" />
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:text="Lehongluc18111998@gmail.com"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/_15sdp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:background="@drawable/bg_sent_message"
+        android:orientation="horizontal"
+        android:padding="@dimen/_10sdp"
+        android:visibility="invisible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name: "
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/_15sdp" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:text="name"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/_15sdp" />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_100sdp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/_10sdp">
+
+        <TextView
+            android:id="@+id/tv_changePass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_received_message"
+            android:padding="@dimen/_10sdp"
+            android:text="ĐỔI MẬT KHẨU"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_changeProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:background="@drawable/bg_sent_message"
+            android:padding="@dimen/_10sdp"
+            android:text="ĐỔI THÔNG TIN"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

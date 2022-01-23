@@ -7,8 +7,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
 
     <application
         android:allowBackup="true"
@@ -18,8 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MiniChat">
         <activity
+            android:name=".Activity.ChangeProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.SplashActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,9 +48,7 @@
         <activity
             android:name=".Activity.SignInActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize">
-
-        </activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Activity.MainActivity"
             android:exported="true" />
@@ -59,7 +63,8 @@
         <service
             android:name=".utilities.ChatHeadService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
+
         <receiver
             android:name=".utilities.Broadcast"
             android:enabled="true"

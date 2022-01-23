@@ -27,7 +27,7 @@ public class PreferenceManager {
     }
 
     public String getString(String key) {
-        return sharedPreferences.getString(key, null);
+        return sharedPreferences.getString(key, "");
     }
 
     public void clear() {
@@ -35,5 +35,6 @@ public class PreferenceManager {
         editor.clear();
         editor.apply();
     }
+
 }
 

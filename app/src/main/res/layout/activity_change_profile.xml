@@ -5,21 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activity.ChangePasswordActivity">
+    tools:context=".Activity.ChangeProfileActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="@color/primary"
-        android:bottomLeftRadius="@dimen/_32sdp"
-        android:bottomRightRadius="@dimen/_32sdp">
+        android:orientation="vertical">
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgBack"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="@dimen/_12sdp"
-            android:layout_marginBottom="@dimen/_12sdp"
             android:padding="@dimen/_6sdp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_back"
@@ -27,7 +25,29 @@
             app:layout_constraintTop_toTopOf="parent"
             app:riv_corner_radius="@dimen/_8sdp"
             app:tint="@color/white" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imgAvt"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_80sdp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:background="@drawable/bg_icon"
+            android:scaleType="centerCrop"
+            android:transitionName="imgAvt_changepass"
+            app:riv_corner_radius="@dimen/_8sdp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="( bấm vào ảnh để chỉnh sửa )"
+            android:textColor="#A4B7BF"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="italic"/>
     </LinearLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
@@ -35,7 +55,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"
         android:layout_marginRight="20dp"
-        android:hint="Mật khẩu cũ"
+        android:hint="Email"
         android:textColorHint="#5E5D5D"
         app:boxCornerRadiusBottomEnd="20dp"
         app:boxCornerRadiusBottomStart="20dp"
@@ -45,13 +65,14 @@
         app:errorEnabled="true"
         app:hintTextAppearance="@style/TextAppearance.AppCompat.Body2"
         app:hintTextColor="@color/primary"
-        app:startIconDrawable="@drawable/ic_baseline_lock_24"
+        app:startIconDrawable="@drawable/ic_mail"
         app:startIconTint="#5E5D5D">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edtoldPass"
+            android:id="@+id/edtEmail"
+            android:inputType="textEmailAddress"
             android:padding="20dp"
             android:textColor="@color/primary_text"
             app:errorEnabled="true" />
@@ -63,9 +84,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
-        android:hint="Mật khẩu mới"
+        android:layout_marginTop="20dp"
+        android:hint="Name"
         android:textColorHint="#5E5D5D"
         app:boxCornerRadiusBottomEnd="20dp"
         app:boxCornerRadiusBottomStart="20dp"
@@ -75,43 +96,13 @@
         app:errorEnabled="true"
         app:hintTextAppearance="@style/TextAppearance.AppCompat.Body2"
         app:hintTextColor="@color/primary"
-        app:startIconDrawable="@drawable/ic_baseline_lock_24"
+        app:startIconDrawable="@drawable/ic_name"
         app:startIconTint="#5E5D5D">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edtnewPass"
-            android:padding="20dp"
-            android:textColor="@color/primary_text"
-            app:errorEnabled="true" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:hint="Nhập lại mật khẩu mới"
-        android:textColorHint="#5E5D5D"
-        app:boxCornerRadiusBottomEnd="20dp"
-        app:boxCornerRadiusBottomStart="20dp"
-        app:boxCornerRadiusTopEnd="20dp"
-        app:boxCornerRadiusTopStart="20dp"
-        app:boxStrokeColor="@color/primary"
-        app:errorEnabled="true"
-        app:hintTextAppearance="@style/TextAppearance.AppCompat.Body2"
-        app:hintTextColor="@color/primary"
-        app:startIconDrawable="@drawable/ic_baseline_lock_24"
-        app:startIconTint="#5E5D5D">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/edtconfirmPass"
+            android:id="@+id/edtName"
             android:padding="20dp"
             android:textColor="@color/primary_text"
             app:errorEnabled="true" />

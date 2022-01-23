@@ -160,7 +160,7 @@ public class SignUpActivity extends AppCompatActivity {
     private void signUp(Uri url) {
         loading(true);
         FirebaseStorage storage=FirebaseStorage.getInstance();
-        StorageReference storageReference=storage.getReference().child("Avatar");
+        StorageReference storageReference=storage.getReference().child("imgUser").child(binding.edtSignUpEmail.getText().toString());
         storageReference.putFile(Imageuri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -183,6 +183,7 @@ public class SignUpActivity extends AppCompatActivity {
                             preferenceManager.putString(Constants.KEY_USER_ID, documentReference.getId());
                             preferenceManager.putString(Constants.KEY_IMAGE, dowloaduri.toString());
                             preferenceManager.putString(Constants.KEY_NAME, binding.edtSignUpName.getText().toString());
+                            preferenceManager.putString(Constants.KEY_EMAIL,binding.edtSignUpEmail.getText().toString());
 
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

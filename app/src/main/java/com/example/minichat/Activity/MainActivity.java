@@ -32,6 +32,7 @@ import com.example.minichat.utilities.PreferenceManager;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -59,7 +60,6 @@ public class MainActivity extends BaseActivity implements UserListener {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Fresco.initialize(getApplicationContext());
 
         //kiểm tra kết nối mạng
         if (checkConnect() == false) {
@@ -99,6 +99,7 @@ public class MainActivity extends BaseActivity implements UserListener {
         getToken();
         setListeners();
         listenerConversation();
+
         if (!Settings.canDrawOverlays(this)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                     Uri.parse("package:" + getPackageName()));
@@ -157,8 +158,7 @@ public class MainActivity extends BaseActivity implements UserListener {
         binding.fab.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), UserActivity.class)));
         binding.imgAvt.setOnClickListener(v -> {
 
-
-            Intent intent = new Intent(getApplicationContext(), ChangePasswordActivity.class);
+            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
             ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, binding.imgAvt, ViewCompat.getTransitionName(binding.imgAvt));
             startActivity(intent, optionsCompat.toBundle());
 
@@ -167,13 +167,22 @@ public class MainActivity extends BaseActivity implements UserListener {
 
     // load ảnh và tên của user mới đăng nhập
     private void loadDetails() {
-        binding.tvName.setText(preferenceManager.getString(Constants.KEY_NAME));
-        Glide.with(this).load(preferenceManager.getString(Constants.KEY_IMAGE)).into(binding.imgAvt);
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore.collection(Constants.KEY_COLLECTION_USERS)
+                .whereEqualTo(Constants.KEY_EMAIL, preferenceManager.getString(Constants.KEY_EMAIL))
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() > 0) {
+                        DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                        Glide.with(this).load(documentSnapshot.getString(Constants.KEY_IMAGE)).into(binding.imgAvt);
+                        binding.tvName.setText(documentSnapshot.getString(Constants.KEY_NAME));
+                    }
+                });
+
     }
 
 
-
-
+// lắng nghe cuộc hội thoại
     private void listenerConversation() {
         firebaseFirestore.collection(Constants.KEY_COLLECTION_CONVERSIONS)
                 .whereEqualTo(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
@@ -183,6 +192,7 @@ public class MainActivity extends BaseActivity implements UserListener {
                 .addSnapshotListener(eventListener);
     }
 
+    //sự kiện lắng nghe
     private final EventListener<QuerySnapshot> eventListener = (value, er) -> {
         if (er != null) {
             return;
@@ -190,7 +200,10 @@ public class MainActivity extends BaseActivity implements UserListener {
 
         if (value != null) {
             for (DocumentChange documentChange : value.getDocumentChanges()) {
+
+                // báo nếu firebase có thêm dữ liệu mới thì.
                 if (documentChange.getType() == DocumentChange.Type.ADDED) {
+
                     String senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                     String receivedId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
 
@@ -209,9 +222,13 @@ public class MainActivity extends BaseActivity implements UserListener {
                     }
                     chatMessage.message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
                     chatMessage.dateObject = documentChange.getDocument().getDate(Constants.KEY_TIME_STAMP);
+
                     chatMessageList.add(chatMessage);
-                } else if (documentChange.getType() == DocumentChange.Type.MODIFIED) {
+                } else
+                    // nếu không được  thêm mới mà được sửa đổi
+                    if (documentChange.getType() == DocumentChange.Type.MODIFIED) {
                     for (int i = 0; i < chatMessageList.size(); i++) {
+
                         String senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                         String receivedId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
                         if (chatMessageList.get(i).senderId.equals(senderId) && chatMessageList.get(i).receivedId.equals(receivedId)) {
@@ -246,7 +263,7 @@ public class MainActivity extends BaseActivity implements UserListener {
     private void signOut() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("ĐĂNG XUẤT");
-        builder.setMessage("Bạn có chắc muốn đăng xuất??");
+        builder.setMessage("Bạn có chắc muốn đăng xuất???");
 
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
@@ -254,13 +271,11 @@ public class MainActivity extends BaseActivity implements UserListener {
 
                 FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
                 DocumentReference documentReference =
-                        firebaseFirestore.collection(Constants.KEY_COLLECTION_USERS)
-                                .document(preferenceManager.getString(Constants.KEY_USER_ID));
+                        firebaseFirestore.collection(Constants.KEY_COLLECTION_USERS).document(preferenceManager.getString(Constants.KEY_USER_ID));
 
                 HashMap<String, Object> updates = new HashMap<>();
                 updates.put(Constants.KEY_FCM_TOKEN, FieldValue.delete());
-                documentReference.update(updates)
-                        .addOnSuccessListener(unused -> {
+                documentReference.update(updates).addOnSuccessListener(unused -> {
                             preferenceManager.clear();
                             startActivity(new Intent(getApplicationContext(), SignInActivity.class));
                             finish();

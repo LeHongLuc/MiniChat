@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.example.minichat.R;
 import com.example.minichat.databinding.ActivitySignInBinding;
 
-import com.example.minichat.databinding.DialogConnectionWarningBinding;
 import com.example.minichat.utilities.Constants;
 import com.example.minichat.utilities.PreferenceManager;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -28,7 +27,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignInActivity extends AppCompatActivity {
 
-    private DialogConnectionWarningBinding bindingDialog;
     private ActivitySignInBinding binding;
     PreferenceManager preferenceManager;
     AlertDialog alertDialog;
@@ -37,11 +35,12 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        //tự động đăng nhập nếu đã lưu tài khoản
         preferenceManager = new PreferenceManager(getApplicationContext());
 
+        //tự động đăng nhập nếu đã lưu tài khoản
         if (preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)) {
-            signIn();
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
         }
 
         //kiểm tra mạng
@@ -184,7 +183,11 @@ public class SignInActivity extends AppCompatActivity {
                         preferenceManager.clear();
                         preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
                         preferenceManager.putString(Constants.KEY_USER_ID, documentSnapshot.getId());
+                        preferenceManager.putString(Constants.KEY_NAME, documentSnapshot.getString(Constants.KEY_NAME));
+                        preferenceManager.putString(Constants.KEY_IMAGE, documentSnapshot.getString(Constants.KEY_IMAGE));
                         preferenceManager.putString(Constants.KEY_EMAIL, documentSnapshot.getString(Constants.KEY_EMAIL));
+                        preferenceManager.putString(Constants.KEY_PHONE, documentSnapshot.getString(Constants.KEY_PHONE));
+                        preferenceManager.putString(Constants.KEY_PASSWORD, documentSnapshot.getString(Constants.KEY_PASSWORD));
 
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

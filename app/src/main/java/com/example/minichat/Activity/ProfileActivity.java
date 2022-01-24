@@ -3,7 +3,10 @@ package com.example.minichat.Activity;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +16,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.minichat.R;
@@ -62,6 +66,32 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        binding.layoutPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog;
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                builder.setMessage("Bạn có muốn thực hiện cuộc gọi tới "+binding.tvName.getText().toString()+" ?");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent (Intent.ACTION_DIAL);
+                        intent.setData(Uri.fromParts("tel", binding.tvPhone.getText().toString(), null));
+                        startActivity(intent);
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertDialog = builder.create();
+                alertDialog.show();
+
+            }});
+
         binding.tvChangePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +113,7 @@ public class ProfileActivity extends AppCompatActivity {
                         Glide.with(this).load(documentSnapshot.getString(Constants.KEY_IMAGE)).into(binding.imgAvt);
                         binding.tvName.setText(documentSnapshot.getString(Constants.KEY_NAME));
                         binding.tvEmail.setText(documentSnapshot.getString(Constants.KEY_EMAIL));
+                        binding.tvPhone.setText(documentSnapshot.getString(Constants.KEY_PHONE));
                     }
                 });
         profileAnimation();
@@ -91,11 +122,13 @@ public class ProfileActivity extends AppCompatActivity {
     private void profileAnimation() {
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.right_to_left);
         Animation animation1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.right_to_left);
+        Animation animation2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.right_to_left);
         Animation animation3 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.right_to_left);
         Animation animation4 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_to_right);
 
         binding.layoutEmail.setVisibility(View.VISIBLE);
         binding.layoutName.setVisibility(View.VISIBLE);
+        binding.layoutPhone.setVisibility(View.VISIBLE);
         binding.tvChangeProfile.setVisibility(View.VISIBLE);
         binding.tvChangePass.setVisibility(View.VISIBLE);
 
@@ -113,7 +146,13 @@ public class ProfileActivity extends AppCompatActivity {
                 binding.layoutName.startAnimation(animation1);
             }
         }, 600);
-
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                binding.layoutPhone.setVisibility(View.VISIBLE);
+                binding.layoutPhone.startAnimation(animation2);
+            }
+        }, 900);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -123,6 +162,6 @@ public class ProfileActivity extends AppCompatActivity {
                 binding.tvChangeProfile.startAnimation(animation3);
                 binding.tvChangePass.startAnimation(animation4);
             }
-        }, 900);
+        }, 1200);
     }
 }

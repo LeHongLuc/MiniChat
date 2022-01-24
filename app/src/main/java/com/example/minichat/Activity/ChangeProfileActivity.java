@@ -47,6 +47,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
     ActivityChangeProfileBinding binding;
     Uri Imageuri;
     AlertDialog alertDialog;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class ChangeProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_change_profile);
         binding = ActivityChangeProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        db = FirebaseFirestore.getInstance();
         preferenceManager = new PreferenceManager(getApplicationContext());
 
         loadDetails();
@@ -180,7 +181,6 @@ public class ChangeProfileActivity extends AppCompatActivity {
     // xác nhận muốn thay đổi thông tin
     private void confirm() {
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
         StorageReference storageRef = storage.getReference();
@@ -203,8 +203,8 @@ public class ChangeProfileActivity extends AppCompatActivity {
                             preferenceManager.putString(Constants.KEY_EMAIL, binding.edtEmail.getText().toString());
                             preferenceManager.putString(Constants.KEY_NAME, binding.edtName.getText().toString());
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            Log.e("Key name: ",preferenceManager.getString(Constants.KEY_NAME));
                         }
-
                     }
                 });
             }

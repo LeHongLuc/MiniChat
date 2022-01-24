@@ -141,7 +141,6 @@ public class MainActivity extends BaseActivity implements UserListener {
 
 
 
-
     //kiểm tra kết nối mạng
     private boolean checkConnect() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

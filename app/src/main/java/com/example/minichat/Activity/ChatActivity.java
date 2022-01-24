@@ -88,6 +88,7 @@ public class ChatActivity extends BaseActivity {
     }
 
 
+    
     private void sendMessage() {
         HashMap<String, Object> message = new HashMap<>();
 

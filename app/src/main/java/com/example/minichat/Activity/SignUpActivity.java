@@ -71,12 +71,12 @@ public class SignUpActivity extends AppCompatActivity {
 
     private final int PICK_IMAGE_REQUEST = 71;
     private Uri filePath;
+
     private void setListeners() {
         binding.tvSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), SignInActivity.class));
-                Toast.makeText(getApplicationContext(),"Ấdas",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -84,7 +84,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isValiSignUpDetails()) {
-                    signUp(Imageuri);
+                    signUp();
                 }
             }
         });
@@ -93,7 +93,6 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 RequestPermissions();
-
             }
         });
     }
@@ -157,7 +156,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
 
-    private void signUp(Uri url) {
+    private void signUp() {
         loading(true);
         FirebaseStorage storage=FirebaseStorage.getInstance();
         StorageReference storageReference=storage.getReference().child("imgUser").child(binding.edtSignUpEmail.getText().toString());
@@ -173,6 +172,7 @@ public class SignUpActivity extends AppCompatActivity {
                 user.put(Constants.KEY_NAME, binding.edtSignUpName.getText().toString().trim());
                 user.put(Constants.KEY_EMAIL, binding.edtSignUpEmail.getText().toString().trim());
                 user.put(Constants.KEY_PASSWORD, binding.edtSignUpPassword.getText().toString().trim());
+                user.put(Constants.KEY_PHONE, binding.edtPhone.getText().toString().trim());
                 user.put(Constants.KEY_IMAGE, dowloaduri.toString());
 
                 firebaseFirestore.collection(Constants.KEY_COLLECTION_USERS)
@@ -184,6 +184,8 @@ public class SignUpActivity extends AppCompatActivity {
                             preferenceManager.putString(Constants.KEY_IMAGE, dowloaduri.toString());
                             preferenceManager.putString(Constants.KEY_NAME, binding.edtSignUpName.getText().toString());
                             preferenceManager.putString(Constants.KEY_EMAIL,binding.edtSignUpEmail.getText().toString());
+                            preferenceManager.putString(Constants.KEY_PHONE,binding.edtPhone.getText().toString());
+
 
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -214,7 +216,11 @@ public class SignUpActivity extends AppCompatActivity {
         } else if (binding.edtSignUpEmail.getText().toString().trim().isEmpty()) {
             showToast("Enter email");
             return false;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(binding.edtSignUpEmail.getText().toString()).matches()) {
+        }else if (binding.edtPhone.getText().toString().trim().isEmpty()) {
+            showToast("Enter your phone number");
+            return false;
+        }
+        else if (!Patterns.EMAIL_ADDRESS.matcher(binding.edtSignUpEmail.getText().toString()).matches()) {
             showToast("Enter valid email");
             return false;
         } else if (binding.edtSignUpPassword.getText().toString().trim().isEmpty()) {

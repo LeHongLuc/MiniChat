@@ -35,6 +35,9 @@ public class Constants {
     public static final String CLASSIFY_MESS="CLASSIFY_MESS";
     public static final String CLASSIFY_MAP="CLASSIFY_MAP";
     public static final String CLASSIFY_IMG="CLASSIFY_IMG";
+    public static final String KEY_CLASSIFY = "classify";
+    public static final String KEY_POSITION = "positionMap";
+    public static final String KEY_LINK_IMG = "linkimg";
 
 
     public static HashMap<String, String> remoteMsgHeader = null;

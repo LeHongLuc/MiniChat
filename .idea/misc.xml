@@ -39,18 +39,24 @@
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/bg_sent_message.xml" value="0.21614583333333334" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/bg_waning.xml" value="0.21614583333333334" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/bg_warning.xml" value="0.21614583333333334" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/ic_coordinates.xml" value="0.21614583333333334" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/ic_fail_connected.xml" value="0.21614583333333334" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/ic_img.xml" value="0.21614583333333334" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/ic_phone.xml" value="0.21614583333333334" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/drawable/ic_send.xml" value="0.21614583333333334" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/activity_change_password.xml" value="0.22" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/activity_change_profile.xml" value="0.22" />
-        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/activity_chat.xml" value="0.1" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/activity_chat.xml" value="0.22" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/activity_profile.xml" value="0.25" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/activity_sign_in.xml" value="0.15" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/activity_sign_up.xml" value="0.192481884057971" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/activity_splash.xml" value="0.1213768115942029" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/dialog_connection_warning.xml" value="0.16" />
-        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/item_container_received_message.xml" value="0.1" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/item_container_received_message.xml" value="0.25" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/item_container_recent_conversion.xml" value="0.25" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/item_container_sent_message.xml" value="0.25" />
+        <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/item_user.xml" value="0.25" />
         <entry key="..\:/project/tranning/MiniChat/app/src/main/res/layout/layout_chat_head.xml" value="0.1" />
       </map>
     </option>

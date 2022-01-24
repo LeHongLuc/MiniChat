@@ -16,6 +16,7 @@ import com.example.minichat.UserListener;
 import com.example.minichat.databinding.ItemContainerRecentConversionBinding;
 import com.example.minichat.models.ChatMessage;
 import com.example.minichat.models.User;
+import com.example.minichat.utilities.Constants;
 
 import java.util.List;
 
@@ -63,7 +64,15 @@ public class RecentConversionAdapter extends RecyclerView.Adapter<RecentConversi
         void setData(ChatMessage chatMessage) {
             Glide.with(mContext).load(chatMessage.conversionImage).into(binding.imgProfile);
             binding.tvName.setText(chatMessage.conversionName);
-            binding.tvRecentMessage.setText(chatMessage.message);
+
+            if (chatMessage.classify.equals(Constants.CLASSIFY_MESS)) {
+                binding.tvRecentMessage.setText(chatMessage.message);
+            } else if (chatMessage.classify.equals(Constants.CLASSIFY_MAP)) {
+                binding.tvRecentMessage.setText("Đã gửi một tọa độ");
+            } else if (chatMessage.classify.equals(Constants.CLASSIFY_IMG)) {
+                binding.tvRecentMessage.setText("Đã gửi một ảnh");
+            }
+
             binding.getRoot().setOnClickListener(v -> {
                 User user = new User();
                 user.id = chatMessage.conversionId;

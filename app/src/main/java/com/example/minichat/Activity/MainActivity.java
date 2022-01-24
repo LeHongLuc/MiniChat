@@ -221,6 +221,7 @@ public class MainActivity extends BaseActivity implements UserListener {
                     }
                     chatMessage.message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
                     chatMessage.dateObject = documentChange.getDocument().getDate(Constants.KEY_TIME_STAMP);
+                    chatMessage.classify=documentChange.getDocument().getString(Constants.KEY_CLASSIFY);
 
                     chatMessageList.add(chatMessage);
                 } else
@@ -233,12 +234,13 @@ public class MainActivity extends BaseActivity implements UserListener {
                         if (chatMessageList.get(i).senderId.equals(senderId) && chatMessageList.get(i).receivedId.equals(receivedId)) {
                             chatMessageList.get(i).message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
                             chatMessageList.get(i).dateObject = documentChange.getDocument().getDate(Constants.KEY_TIME_STAMP);
+                            chatMessageList.get(i).classify=documentChange.getDocument().getString(Constants.KEY_CLASSIFY);
                             break;
                         }
                     }
                 }
             }
-            Collections.sort(chatMessageList, (obj1, obj2) -> obj2.dateObject.compareTo(obj1.dateObject));
+            Collections.sort(chatMessageList, (obj1, obj3) -> obj3.dateObject.compareTo(obj1.dateObject));
             recentConversionAdapter.notifyDataSetChanged();
             binding.progressBar.setVisibility(View.GONE);
             binding.rvConversion.smoothScrollToPosition(0);

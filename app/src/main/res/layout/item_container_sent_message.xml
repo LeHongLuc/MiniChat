@@ -1,38 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_sent_mess"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/_8sdp"
-    android:padding="@dimen/_4sdp"
-    android:id="@+id/item_sent_mess">
+    android:padding="@dimen/_4sdp">
 
 
-<TextView
-        android:id="@+id/tvMessage"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/layout_send"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_sent_message"
-        android:paddingLeft="@dimen/_12sdp"
-        android:paddingTop="@dimen/_8sdp"
-        android:paddingRight="@dimen/_12sdp"
-        android:paddingBottom="@dimen/_8sdp"
-        android:text="Hi"
-        android:textColor="@color/primary"
-        android:textSize="@dimen/_13ssp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="wrap"
-        app:layout_constraintWidth_percent="0.8" />
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@drawable/bg_sent_message"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:paddingLeft="@dimen/_12sdp"
+                android:paddingTop="@dimen/_8sdp"
+                android:paddingRight="@dimen/_12sdp"
+                android:paddingBottom="@dimen/_8sdp"
+                android:text="Hi"
+
+                android:textColor="@color/primary"
+                android:textSize="@dimen/_13ssp" />
+
+
+            <ImageView
+                android:id="@+id/img_mess"
+                android:layout_width="@dimen/_200sdp"
+                android:layout_height="@dimen/_200sdp"
+                android:layout_gravity="right"
+                android:src="@drawable/ic_img"
+                android:visibility="gone"
+                />
+        </LinearLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvDateTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginRight="16dp"
         android:text="Date time"
         android:textColor="@color/secondary_text"
         android:textSize="@dimen/_8ssp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvMessage" />
+        app:layout_constraintTop_toBottomOf="@id/layout_send" />
 </androidx.constraintlayout.widget.ConstraintLayout>

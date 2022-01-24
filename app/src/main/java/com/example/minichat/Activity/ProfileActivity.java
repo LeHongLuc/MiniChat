@@ -126,11 +126,7 @@ public class ProfileActivity extends AppCompatActivity {
         Animation animation3 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.right_to_left);
         Animation animation4 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_to_right);
 
-        binding.layoutEmail.setVisibility(View.VISIBLE);
-        binding.layoutName.setVisibility(View.VISIBLE);
-        binding.layoutPhone.setVisibility(View.VISIBLE);
-        binding.tvChangeProfile.setVisibility(View.VISIBLE);
-        binding.tvChangePass.setVisibility(View.VISIBLE);
+
 
         new Handler().postDelayed(new Runnable() {
             @Override

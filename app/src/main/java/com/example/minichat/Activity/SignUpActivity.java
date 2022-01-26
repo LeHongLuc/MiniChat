@@ -36,9 +36,7 @@ import gun0912.tedbottompicker.TedBottomSheetDialogFragment;
 
 public class SignUpActivity extends AppCompatActivity {
     Uri Imageuri;
-    LinearLayout LayoutSignUp;
     ActivitySignUpBinding binding;
-    String encodedImage;
     PreferenceManager preferenceManager;
 
     FirebaseStorage storage;
@@ -56,8 +54,7 @@ public class SignUpActivity extends AppCompatActivity {
       
         setListeners();
         preferenceManager = new PreferenceManager(getApplicationContext());
-        LayoutSignUp = findViewById(R.id.LayoutSignUp);
-        LayoutSignUp.setOnClickListener(new View.OnClickListener() {
+       binding.LayoutSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 View view1 = getCurrentFocus();
@@ -92,34 +89,12 @@ public class SignUpActivity extends AppCompatActivity {
         binding.layoutImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestPermissions();
+                reQuestPermission();
             }
         });
     }
 
     // xin quyền truy cập máy ảnh và file để lấy ảnh
-    private void RequestPermissions() {
-        PermissionListener permissionlistener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                //nếu đã cấp quyền thì truy cập vào bộ nhớ để lấy ảnh
-                reQuestPermission();
-            }
-
-            @Override
-            public void onPermissionDenied(List<String> deniedPermissions) {
-                Toast.makeText(SignUpActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-        };
-        TedPermission.create()
-                .setPermissionListener(permissionlistener)
-                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
-                .check();
-    }
-
-// truy cập bộ nhớ
     private void reQuestPermission() {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override

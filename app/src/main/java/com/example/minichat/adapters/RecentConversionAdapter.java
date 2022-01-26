@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -68,9 +69,9 @@ public class RecentConversionAdapter extends RecyclerView.Adapter<RecentConversi
             if (chatMessage.classify.equals(Constants.CLASSIFY_MESS)) {
                 binding.tvRecentMessage.setText(chatMessage.message);
             } else if (chatMessage.classify.equals(Constants.CLASSIFY_MAP)) {
-                binding.tvRecentMessage.setText("Đã gửi một tọa độ");
+                binding.tvRecentMessage.setText("tọa độ");
             } else if (chatMessage.classify.equals(Constants.CLASSIFY_IMG)) {
-                binding.tvRecentMessage.setText("Đã gửi một ảnh");
+                binding.tvRecentMessage.setText("ảnh");
             }
 
             binding.getRoot().setOnClickListener(v -> {

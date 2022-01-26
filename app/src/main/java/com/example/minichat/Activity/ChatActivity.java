@@ -1,16 +1,19 @@
 package com.example.minichat.Activity;
 
 
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.Toast;
+
 import com.example.minichat.ApiService;
+import com.example.minichat.R;
 import com.example.minichat.adapters.ChatAdapter;
 import com.example.minichat.databinding.ActivityChatBinding;
 import com.example.minichat.models.ChatMessage;
@@ -20,6 +23,8 @@ import com.example.minichat.utilities.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -71,6 +76,7 @@ public class ChatActivity extends BaseActivity {
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
         setListeners();
         loadReceivedMessage();
         init();
@@ -87,22 +93,70 @@ public class ChatActivity extends BaseActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
+    // các sự kiện, nút bấm
+    private void setListeners() {
+        binding.imgBack.setOnClickListener(v -> onBackPressed());
+        binding.layoutSendMess.setOnClickListener(new View.OnClickListener() {
+            @Override
+                                                      public void onClick(View v) {
+                if (binding.edMessage.getText().toString()!=null&&!binding.edMessage.getText().toString().equals("")) {
+                    sendMessage(Constants.CLASSIFY_MESS);
+                }
+                                                      }
+                                                  }
 
+        );
+        binding.layoutSendMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage(Constants.CLASSIFY_MAP);
+            }
+        });
+        binding.layoutSendImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage(Constants.CLASSIFY_IMG);
+            }
+        });
+        binding.rcvChat.setOnClickListener(v -> {
+                    View view1 = getCurrentFocus();
+                    if (view1 != null) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
+                    }
+                }
+        );
+
+    }
 
     private void sendMessage(String classify) {
         HashMap<String, Object> message = new HashMap<>();
 
+        if (classify == Constants.CLASSIFY_MESS) {
+            message.put(Constants.KEY_CLASSIFY, classify);
+            Log.e("Send ", "mess");
+            message.put(Constants.KEY_MESSAGE, binding.edMessage.getText().toString());
+        } else
+            if (classify == Constants.CLASSIFY_IMG) {
+            message.put(Constants.KEY_CLASSIFY, classify);
+            Log.e("Send ", "img");
+            RequestPermissions();
+            message.put(Constants.KEY_MESSAGE, preferenceManager.getString(Constants.KEY_LINK_IMG));
+        }
+
 
         message.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
-        message.put(Constants.KEY_MESSAGE, binding.edMessage.getText().toString());
         message.put(Constants.KEY_RECEIVER_ID, user.id);
-        message.put(Constants.KEY_CLASSIFY,classify);
         message.put(Constants.KEY_TIME_STAMP, new Date());
-
+        preferenceManager.putString(Constants.KEY_TIME_STAMP, new Date().toString());
         firebaseFirestore.collection(Constants.KEY_COLLECTION_CHAT).add(message);
 
+
         if (conversionId != null) {
-            updateConversion(binding.edMessage.getText().toString());
+            if(binding.edMessage.getText().toString()!=null&&!binding.edMessage.getText().toString().equals(""))
+            updateConversion(binding.edMessage.getText().toString(),classify);
+            else  updateConversion( preferenceManager.getString(Constants.KEY_LINK_IMG),classify);
+
         } else {
             HashMap<String, Object> hashMap = new HashMap<>();
             hashMap.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
@@ -112,13 +166,19 @@ public class ChatActivity extends BaseActivity {
             hashMap.put(Constants.KEY_RECEIVER_ID, user.id);
             hashMap.put(Constants.KEY_RECEIVER_NAME, user.name);
             hashMap.put(Constants.KEY_RECEIVER_IMAGE, user.image);
-            hashMap.put(Constants.KEY_CLASSIFY,classify);
 
-            hashMap.put(Constants.KEY_LAST_MESSAGE, binding.edMessage.getText().toString());
             hashMap.put(Constants.KEY_TIME_STAMP, new Date());
 
+            if (classify.equals(Constants.CLASSIFY_MESS)) {
+                hashMap.put(Constants.KEY_CLASSIFY, Constants.CLASSIFY_MESS);
+                hashMap.put(Constants.KEY_LAST_MESSAGE, binding.edMessage.getText().toString());
+            } else if (classify == Constants.CLASSIFY_IMG) {
+                hashMap.put(Constants.KEY_CLASSIFY, Constants.CLASSIFY_IMG);
+                hashMap.put(Constants.KEY_LAST_MESSAGE, preferenceManager.getString(Constants.KEY_LINK_IMG));
+            }
             addConversion(hashMap);
         }
+
         if (!isReceiverAvailable) {
             try {
                 JSONArray token = new JSONArray();
@@ -129,7 +189,7 @@ public class ChatActivity extends BaseActivity {
                 data.put(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
                 data.put(Constants.KEY_FCM_TOKEN, preferenceManager.getString(Constants.KEY_FCM_TOKEN));
                 data.put(Constants.KEY_MESSAGE, binding.edMessage.getText().toString());
-                data.put(Constants.KEY_CLASSIFY,classify);
+                data.put(Constants.KEY_CLASSIFY, classify);
 
                 JSONObject body = new JSONObject();
                 body.put(Constants.REMOTE_MSG_DATA, data);
@@ -229,7 +289,7 @@ public class ChatActivity extends BaseActivity {
                     chatMessage.receivedId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
                     chatMessage.message = documentChange.getDocument().getString(Constants.KEY_MESSAGE);
                     chatMessage.dateTime = getRealDateTime(documentChange.getDocument().getDate(Constants.KEY_TIME_STAMP));
-                    chatMessage.classify= documentChange.getDocument().getString(Constants.KEY_CLASSIFY);
+                    chatMessage.classify = documentChange.getDocument().getString(Constants.KEY_CLASSIFY);
                     chatMessage.dateObject = documentChange.getDocument().getDate(Constants.KEY_TIME_STAMP);
                     chatMessageList.add(chatMessage);
                 }
@@ -248,30 +308,12 @@ public class ChatActivity extends BaseActivity {
         }
     };
 
-
     //load tin nhắn của người nhận
     private void loadReceivedMessage() {
         user = (User) getIntent().getSerializableExtra(Constants.KEY_USER);
         binding.tvName.setText(user.name);
     }
 
-
-    // các sự kiện, nút bấm
-    private void setListeners() {
-        binding.imgBack.setOnClickListener(v -> onBackPressed());
-        binding.layoutSendMess.setOnClickListener(v -> sendMessage(Constants.CLASSIFY_MESS));
-        binding.layoutSendMap.setOnClickListener(v -> sendMessage(Constants.CLASSIFY_MAP));
-        binding.layoutSendImage.setOnClickListener(v -> sendMessage(Constants.CLASSIFY_IMG));
-        binding.rcvChat.setOnClickListener(v -> {
-                    View view1 = getCurrentFocus();
-                    if (view1 != null) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
-                    }
-                }
-        );
-
-    }
 
     //get thời gian gửi tin nhắn
     private String getRealDateTime(Date date) {
@@ -286,9 +328,9 @@ public class ChatActivity extends BaseActivity {
     }
 
     //update tin nhắn mới nhất
-    private void updateConversion(String message) {
+    private void updateConversion(String message,String classify) {
         DocumentReference documentReference = firebaseFirestore.collection(Constants.KEY_COLLECTION_CONVERSIONS).document(conversionId);
-        documentReference.update(Constants.KEY_LAST_MESSAGE, message, Constants.KEY_TIME_STAMP, new Date());
+        documentReference.update(Constants.KEY_LAST_MESSAGE, message, Constants.KEY_TIME_STAMP, new Date(),Constants.KEY_CLASSIFY,classify);
     }
 
 
@@ -317,37 +359,39 @@ public class ChatActivity extends BaseActivity {
     };
 
 
-
-
-
-
     //gửi tin nhắn ảnh
-    private void sendImg(){
-        FirebaseStorage storage=FirebaseStorage.getInstance();
-        StorageReference storageReference=storage.getReference().child("imgChat").child(preferenceManager.getString(Constants.KEY_SENDER_ID)).child(preferenceManager.getString(Constants.KEY_RECEIVER_ID)).child(Imageuri.toString());
-        storageReference.putFile(Imageuri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+    private void sendImg() {
+        if (Imageuri != null) {
 
-                Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
-                while (!uriTask.isSuccessful());
-                Uri dowloaduri=uriTask.getResult();
-                preferenceManager.putString(Constants.KEY_LINK_IMG,dowloaduri.toString());
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            String timeStamp = String.valueOf(System.currentTimeMillis());
+            StorageReference storageReference = storage.getReference().child("imgChat").child(conversionId).child(timeStamp);
+            //  .child(preferenceManager.getString(Constants.KEY_SENDER_ID))
+            //  .child(preferenceManager.getString(Constants.KEY_RECEIVER_ID))
 
-                FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-                HashMap<String, Object> user = new HashMap<>();
-                user.put(Constants.KEY_IMAGE, dowloaduri.toString());
+            storageReference.putFile(Imageuri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-            }
-        });
+                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!uriTask.isSuccessful()) ;
+                    Uri dowloaduri = uriTask.getResult();
+                    preferenceManager.putString(Constants.KEY_LINK_IMG, dowloaduri.toString());
+
+                }
+            });
+        }
     }
+
     // xin quyền truy cập máy ảnh và file để lấy ảnh
     private void RequestPermissions() {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
                 //nếu đã cấp quyền thì truy cập vào bộ nhớ để lấy ảnh
-                reQuestPermission();
+                openImagePicker();
+
             }
 
             @Override
@@ -362,6 +406,7 @@ public class ChatActivity extends BaseActivity {
                 .setPermissions(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
                 .check();
     }
+
     // truy cập bộ nhớ
     private void reQuestPermission() {
         PermissionListener permissionlistener = new PermissionListener() {
@@ -382,16 +427,17 @@ public class ChatActivity extends BaseActivity {
                 .setPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .check();
     }
-    //chọn ảnh và set vào img trên giao diện
+
+    //chọn ảnh và lấy địa chỉ của ảnh
     private void openImagePicker() {
-        TedBottomPicker.with(ChatActivity.this)
-                .show(new TedBottomSheetDialogFragment.OnImageSelectedListener() {
-                    @Override
-                    public void onImageSelected(Uri uri) {
-                        // here is selected image uri
-                        Imageuri=uri;
-                    }
-                });
+        TedBottomPicker.with(ChatActivity.this).show(new TedBottomSheetDialogFragment.OnImageSelectedListener() {
+            @Override
+            public void onImageSelected(Uri uri) {
+                Imageuri = uri;
+                sendImg();
+
+            }
+        });
 
     }
 

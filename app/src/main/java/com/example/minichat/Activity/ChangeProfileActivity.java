@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -79,6 +81,20 @@ public class ChangeProfileActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
+        binding.layoutChangeProfile.setOnClickListener(v -> {
+            View view1 = getCurrentFocus();
+            if (view1 != null) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
+            }
+        });
+        binding.layoutChangeProfileMini.setOnClickListener(v -> {
+            View view1 = getCurrentFocus();
+            if (view1 != null) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
+            }
+        });
         binding.imgBack.setOnClickListener(v -> {
             onBackPressed();
         });

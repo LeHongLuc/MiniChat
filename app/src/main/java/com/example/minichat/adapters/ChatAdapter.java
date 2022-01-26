@@ -1,18 +1,21 @@
 package com.example.minichat.adapters;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.minichat.databinding.ItemContainerReceivedMessageBinding;
 import com.example.minichat.databinding.ItemContainerSentMessageBinding;
 import com.example.minichat.models.ChatMessage;
+import com.example.minichat.utilities.Constants;
 
 import java.util.List;
 
@@ -84,9 +87,19 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         void setData(ChatMessage chatMessage) {
-            binding.tvMessage.setText(chatMessage.message);
+            if (chatMessage.classify.equals(Constants.CLASSIFY_MESS)) {
+                binding.tvMessage.setVisibility(View.VISIBLE);
+                binding.tvMessage.setText(chatMessage.message);
+                binding.imgMess.setVisibility(View.GONE);
+            } else if (chatMessage.classify.equals(Constants.CLASSIFY_IMG)) {
+                binding.tvMessage.setVisibility(View.GONE);
+                binding.imgMess.setVisibility(View.VISIBLE);
+                Glide.with(mContext).load(chatMessage.message).into(binding.imgMess);
+            }
             binding.tvDateTime.setText(chatMessage.dateTime);
+
             binding.itemSentMess.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onClick(View v) {
                     v.getFocusable();
@@ -109,10 +122,20 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         void setData(ChatMessage chatMessage, String bitmap) {
-            binding.tvMessage.setText(chatMessage.message);
+            if (chatMessage.classify.equals(Constants.CLASSIFY_MESS)) {
+                binding.tvMessage.setVisibility(View.VISIBLE);
+                binding.tvMessage.setText(chatMessage.message);
+                binding.imgMess.setVisibility(View.GONE);
+            } else if (chatMessage.classify.equals(Constants.CLASSIFY_IMG)) {
+                binding.tvMessage.setVisibility(View.GONE);
+                binding.imgMess.setVisibility(View.VISIBLE);
+                Glide.with(mContext).load(chatMessage.message).into(binding.imgMess);
+            }
+
             binding.tvDateTime.setText(chatMessage.dateTime);
             Glide.with(mContext).load(receivedProfileImage).into(binding.imgAvt);
             binding.itemReceivedMess.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onClick(View v) {
                     v.getFocusable();

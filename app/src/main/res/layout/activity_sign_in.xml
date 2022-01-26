@@ -40,9 +40,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_margin="@dimen/_20sdp"
             android:hint="Email"
             android:textColorHint="#5E5D5D"
             app:boxCornerRadiusBottomEnd="20dp"
@@ -57,9 +55,9 @@
             app:startIconTint="#5E5D5D">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtSignInUserEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/edtSignInUserEmail"
                 android:inputType="textEmailAddress"
                 android:padding="20dp"
                 android:textColor="@color/black"
@@ -89,9 +87,9 @@
             app:startIconTint="#5E5D5D">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtSignInPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/edtSignInPassword"
                 android:inputType="textPassword"
                 android:padding="20dp"
                 android:textColor="@color/black"
@@ -115,7 +113,7 @@
             android:layout_margin="@dimen/_16sdp"
             android:animateLayoutChanges="true">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/btnSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
@@ -134,7 +132,7 @@
 
 
         <TextView
-                android:id="@+id/tvCreateNewAccount"
+            android:id="@+id/tvCreateNewAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Đăng ký tài khoản mới"

@@ -1,76 +1,57 @@
 package com.example.minichat.Activity;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.transition.Fade;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.minichat.R;
-import com.example.minichat.databinding.ActivityChangePasswordBinding;
 import com.example.minichat.databinding.ActivityProfileBinding;
+import com.example.minichat.databinding.ActivityProfileReceivedBinding;
 import com.example.minichat.utilities.Constants;
 import com.example.minichat.utilities.PreferenceManager;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileReceivedActivity extends AppCompatActivity {
 
+    ActivityProfileReceivedBinding binding;
     private PreferenceManager preferenceManager;
-    ActivityProfileBinding binding;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        binding = ActivityProfileBinding.inflate(getLayoutInflater());
+        setContentView(R.layout.activity_profile_received);
+        binding = ActivityProfileReceivedBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        //chuyển activity(nhận 1 dữ liệu)
-        Fade fade = new Fade();
-        View decor = getWindow().getDecorView();
-        fade.excludeChildren(decor.findViewById(R.id.action_bar_container), true);
-        fade.excludeTarget(android.R.id.statusBarBackground, true);
-        fade.excludeTarget(android.R.id.navigationBarBackground, true);
-        getWindow().setEnterTransition(fade);
-        getWindow().setExitTransition(fade);
         preferenceManager = new PreferenceManager(getApplicationContext());
 
-        loadDetails();
         setListeners();
+        loadDetails();
 
     }
 
     private void setListeners() {
-        binding.imgBack.setOnClickListener(v -> {
-            onBackPressed();
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
         });
-//        binding.tvChangeProfile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent= new Intent(ProfileActivity.this, ChangeProfileActivity.class);
-//                startActivity(intent);
-//            }
-//        });
         binding.layoutPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog alertDialog;
-                AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfileReceivedActivity.this);
                 builder.setMessage("Bạn có muốn thực hiện cuộc gọi tới "+binding.tvName.getText().toString()+" ?");
                 builder.setCancelable(false);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -91,20 +72,12 @@ public class ProfileActivity extends AppCompatActivity {
                 alertDialog.show();
 
             }});
-
-//        binding.tvChangePass.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent= new Intent(ProfileActivity.this, ChangePasswordActivity.class);
-//                startActivity(intent);
-//            }
-//        });
     }
 
     private void loadDetails() {
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseFirestore.collection(Constants.KEY_COLLECTION_USERS)
-                .whereEqualTo(Constants.KEY_EMAIL, preferenceManager.getString(Constants.KEY_EMAIL))
+                .whereEqualTo(Constants.KEY_EMAIL, preferenceManager.getString(Constants.KEY_RECEIVER_EMAIL))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() > 0) {
@@ -160,4 +133,5 @@ public class ProfileActivity extends AppCompatActivity {
 //            }
 //        }, 1200);
     }
+
 }

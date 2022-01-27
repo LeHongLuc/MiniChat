@@ -18,10 +18,14 @@
         android:roundIcon="@drawable/ic_logo_message"
         android:supportsRtl="true"
         android:theme="@style/Theme.MiniChat">
+        <activity
+            android:name=".Activity.ProfileReceivedActivity"
+            android:exported="false" />
+
         <service
             android:name=".Service.ServiceChat"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity
             android:name=".Activity.ChangeProfileActivity"

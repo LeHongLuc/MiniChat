@@ -87,6 +87,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         void setData(ChatMessage chatMessage) {
+            if (chatMessage.classify==null) return;
             if (chatMessage.classify.equals(Constants.CLASSIFY_MESS)) {
                 binding.tvMessage.setVisibility(View.VISIBLE);
                 binding.tvMessage.setText(chatMessage.message);
@@ -96,6 +97,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 binding.imgMess.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(chatMessage.message).into(binding.imgMess);
             }
+
             binding.tvDateTime.setText(chatMessage.dateTime);
 
             binding.itemSentMess.setOnClickListener(new View.OnClickListener() {

@@ -4,6 +4,7 @@ package com.example.minichat.Activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.example.minichat.ApiService;
 import com.example.minichat.R;
@@ -21,6 +24,7 @@ import com.example.minichat.models.User;
 import com.example.minichat.utilities.Constants;
 import com.example.minichat.utilities.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,6 +54,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import gun0912.tedbottompicker.TedBottomPicker;
 import gun0912.tedbottompicker.TedBottomSheetDialogFragment;
 import retrofit2.Call;
@@ -96,6 +101,11 @@ public class ChatActivity extends BaseActivity {
     // các sự kiện, nút bấm
     private void setListeners() {
         binding.imgBack.setOnClickListener(v -> onBackPressed());
+        binding.imgInfo.setOnClickListener(v -> {
+            Intent intent= new Intent(ChatActivity.this,ProfileReceivedActivity.class);
+            startActivity(intent);
+
+        });
         binding.layoutSendMess.setOnClickListener(new View.OnClickListener() {
             @Override
                                                       public void onClick(View v) {
@@ -361,9 +371,11 @@ public class ChatActivity extends BaseActivity {
 
     //gửi tin nhắn ảnh
     private void sendImg() {
+        SweetAlertDialog pDialog = new SweetAlertDialog(ChatActivity.this, SweetAlertDialog.PROGRESS_TYPE);
+       pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.show();
         if (Imageuri != null) {
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseStorage storage = FirebaseStorage.getInstance();
             String timeStamp = String.valueOf(System.currentTimeMillis());
             StorageReference storageReference = storage.getReference().child("imgChat").child(conversionId).child(timeStamp);
@@ -373,7 +385,7 @@ public class ChatActivity extends BaseActivity {
             storageReference.putFile(Imageuri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
+                    pDialog.dismiss();
                     Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!uriTask.isSuccessful()) ;
                     Uri dowloaduri = uriTask.getResult();
@@ -390,7 +402,7 @@ public class ChatActivity extends BaseActivity {
             @Override
             public void onPermissionGranted() {
                 //nếu đã cấp quyền thì truy cập vào bộ nhớ để lấy ảnh
-                openImagePicker();
+                reQuestPermission();
 
             }
 
@@ -434,7 +446,7 @@ public class ChatActivity extends BaseActivity {
             @Override
             public void onImageSelected(Uri uri) {
                 Imageuri = uri;
-                sendImg();
+                    sendImg();
 
             }
         });

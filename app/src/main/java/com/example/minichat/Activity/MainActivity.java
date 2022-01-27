@@ -191,7 +191,7 @@ public class MainActivity extends BaseActivity implements UserListener {
                 .addSnapshotListener(eventListener);
     }
 
-    //sự kiện lắng nghe
+    //sự kiện nhận tin nhắn mới
     private final EventListener<QuerySnapshot> eventListener = (value, er) -> {
         if (er != null) {
             return;
